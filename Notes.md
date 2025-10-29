@@ -1,10 +1,10 @@
 
 ## Project top level 
 1. src
-      mainapp -> Main.c
-      disp  -> display.c
+     - mainapp -> Main.c
+     - disp  -> display.c
 2. inc
-      disp  -> display.h
+     - disp  -> display.h
 
 ## src (Directory)  
 - lib1
