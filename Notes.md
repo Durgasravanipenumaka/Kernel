@@ -1,10 +1,5 @@
 
-## Project top level 
-1. src
-     - mainapp -> Main.c
-     - disp  -> display.c
-2. inc
-     - disp  -> display.h
+
 
 ## src (Directory)  
 - lib1
@@ -53,7 +48,7 @@ For converting display.o to display.a
    ar -> command
    Ex : ar -rc libdisplay.a display.o 
 
-#### display.h :
+### display.h :
 ```c
 #ifndef _DISPLAY_H
 #define _DISPLAY_H
@@ -62,7 +57,7 @@ void display(char *buffer);
 
 #endif
 ```
-#### main.c :
+### main.c :
 ```c
 #include<stdio.h>
 #include "display.h"
@@ -71,7 +66,7 @@ void main(){
         display("Hello world\n");
 }
 ```
-#### display.c :
+### display.c :
 ```c
 #include<stdio.h>
 
@@ -83,4 +78,16 @@ gcc -c display.c  -> display.o
 ar -rc libdisplay.a display.o  -> libdisplay.a
 gcc main.c -L. -l display  -> a.out
 
+## Project top level 
+1. src
+     - mainapp -> Main.c
+     - disp  -> display.c
+2. inc
+     - disp  -> display.h
+  
+## Build_directory
+  
+- Each and every folder and subfolder will need to have CMakeLists.txt.
+- CMAKE_SOURCE_DIR  -> path to source tree.
+- CMAKE_BINARY_DIR  -> path to build dircetory.
 
