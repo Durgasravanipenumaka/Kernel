@@ -1,4 +1,11 @@
 
+## Project top level 
+1. src
+      mainapp -> Main.c
+      disp  -> display.c
+2. inc
+      disp  -> display.h
+
 ## src (Directory)  
 - lib1
 - lib2
@@ -45,3 +52,35 @@ For converting display.o to display.a
    ar -rc <libraryname.a> <objectfile.o>
    ar -> command
    Ex : ar -rc libdisplay.a display.o 
+
+#### display.h :
+```c
+#ifndef _DISPLAY_H
+#define _DISPLAY_H
+
+void display(char *buffer);
+
+#endif
+```
+#### main.c :
+```c
+#include<stdio.h>
+#include "display.h"
+
+void main(){
+        display("Hello world\n");
+}
+```
+#### display.c :
+```c
+#include<stdio.h>
+
+void display(char *buffer){
+        printf("%s\n",buffer);
+}
+```
+gcc -c display.c  -> display.o
+ar -rc libdisplay.a display.o  -> libdisplay.a
+gcc main.c -L. -l display  -> a.out
+
+
