@@ -39,9 +39,9 @@ gcc main.c-L/path/to/library-ldisplay
 - . -> current working directory.
 - l -> link the library.
 
-- Compile the file only till the object generation.
+Compile the file only till the object generation.
   gcc -c display.c  ->  display.o
-- For converting display.o to display.a
+For converting display.o to display.a
    ar -rc <libraryname.a> <objectfile.o>
    ar -> command
    Ex : ar -rc libdisplay.a display.o 
