@@ -99,8 +99,15 @@ add_subdirectory(src)
 ## Library creation :
 add_library(<LIB_NAME>SRC)
 addlibrary(display display.c)    -> it generates libdisplay.a
+
+## Linking Libraries :
 target_link_libraries(<OUTPUT_FILE><LIB_NAME>) 
 target_link_libraries(mainapp display)
 
 - Never write an absolute path in CMakeList.txt because these paths are changed.
 - Use the reference of macros to access source directory path and build directory path.
+- Similar source tree will be generated in the build directory and all the corresponding libraries will be placed in the corresponding location.
+- Binaries which are not executable are called as archives.Ex:static library
+- Binaries which are executable are called as run time outputs.
+
+- To specify generation of runtime and archeives
