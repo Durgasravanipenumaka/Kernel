@@ -91,3 +91,16 @@ gcc main.c -L. -l display  -> a.out
 - CMAKE_SOURCE_DIR  -> path to source tree.
 - CMAKE_BINARY_DIR  -> path to build dircetory.
 
+add_subdirectory(<DIR_NAME)
+add_subdirectory(src)
+
+- display.c will be compiled to generate libdisplay.a and main.c will be compiled and main.c linked to libdisplay.a.
+
+## Library creation :
+add_library(<LIB_NAME>SRC)
+addlibrary(display display.c)    -> it generates libdisplay.a
+target_link_libraries(<OUTPUT_FILE><LIB_NAME>) 
+target_link_libraries(mainapp display)
+
+- Never write an absolute path in CMakeList.txt because these paths are changed.
+- Use the reference of macros to access source directory path and build directory path.
