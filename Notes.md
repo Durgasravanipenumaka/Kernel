@@ -9,6 +9,7 @@
 
 ## Cmake :
 - CMakeLists.txt inside the source tree
+  
 ### contents :
 - commands to define project,add source,includes and executable
 
@@ -25,11 +26,12 @@
 - Enter inside the build directory and execute :
 - Cmake<path/to/source/tree>
 - Cmake scans the contents of CMakeLists.txt to generate Makefile based on the source tree
- 
 - .a = static library file ,it doesnot have main function.
 - Libraries name always start with lib.
+
 ### If we have sorce code,how to generate sorce code?
-Main.c display.c display.c
+
+main.c display.c display.c
 
 gcc main.c display.c
 
@@ -110,4 +112,25 @@ target_link_libraries(mainapp display)
 - Binaries which are not executable are called as archives.Ex:static library
 - Binaries which are executable are called as run time outputs.
 
-- To specify generation of runtime and archeives
+- To specify generation of runtime outputs and archeives :
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Lib)
+
+- Top level CMakeLists.txt will have instructions to be executed before compilation and move to subdirectories to scan another CMakeLists.txt for further instructions.
+
+add_executable(mainapp main.c file2.c file3. file4.c ...)
+- addexecutable use this souce file is to  execute and remaining files are dependencies.
+- Cmake eases the creation of makefiles in a complex architectured source code.
+
+
+## Compilers :
+compilers translates high level language to machine understandable language.
+
+- Based on architectures :
+
+### Native/host compiler :
+Being on a machine, compiles for same machine.
+
+## Cross compiler :
+Being aon a machine, compiles for different machine.
+And generated code was not generated on the own machine.
