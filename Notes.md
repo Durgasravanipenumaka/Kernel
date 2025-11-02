@@ -133,4 +133,6 @@ Being on a machine, compiles for same machine.
 
 ## Cross compiler :
 Being aon a machine, compiles for different machine.
-And generated code was not generated on the own machine.
+And generated code was not compiled on the own machine.
+
+
