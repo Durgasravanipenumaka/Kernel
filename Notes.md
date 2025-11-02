@@ -1,5 +1,143 @@
+## OPerating System :
+Bring up all the devices and provide a human interface.
 
+- Types :
+1.Genaral Purpose  -> windows,Linux(not time bound,no priority)
+2.Real time   -> RT Linux, FreeRTOS, VXWorks(Time bound based on priority)
 
+## Sheduler : 
+Schedules the next task to be executed.
+
+- Types :
+### 1.Round Robin :
+All tasks get equal amount of time to execute.
+scheduler maintains all the tasks in a linked list.
+Each node in the linked list get equal amount of time to execute.
+
+Advantages :
+Every task will get time to executed.
+
+Disadvantage :
+No priority will given to any task in round robin.
+
+### 2.Pre-emptive Priority Based Scheduler :
+Higher priority task executes first.
+
+Disadvantage :
+There is a posibility of low priority task may get delayed or isolated untill the high priority tasks gets executed.
+
+## Booting Process :
+CPU have a defined address to start the execution form.
+First address - 1st stage of boot loader(BIOS).
+purpose of 1st stage boot loader : Basic system configuration.
+Address -> Next stage of booting process.
+The next stage after the first loader booting process may be 2nd stage boot loader/OS.
+
+- What is the purpose of 2nd stage boot loader ?
+1.Choice of os if multiple os are installed 
+  2nd stage boot loader is optional and it comes when it requires.
+2.Select boot mode : Normal /safe mode/ command prompt mode
+
+second stage bootloader is optional.
+
+Examples of 2nd stage boot loader : Windows boot,Linux GRUB,U-Boot.
+
+- main.c   display.c   display.h
+
+### Make file :
+```c
+SRC = main.c display.c
+```
+- Target is a label which is used to give as an argument to makefile to execute it.
+  Target 1: dependencies
+          gcc main.c display.c
+  Target 2:
+  Target 3 :
+    .
+    .
+
+make / make <Targetname>(optional)
+
+If there is no option argument in the make command the first argument is execute first.
+If a target mentions dependencies the absence of dependent component will makes the target fail.
+The statement return below target is only considered when there is  atab intendations
+
+Ex:
+Target : dependencies
+         gcc main.c display.c
+         command1
+         command2 
+         gcc main.c display.c -o mainapp   -> it creates custom file
+
+Dependencies are opitonal if you give then the dependencies should be there if not make the target file.
+We can give like this also by using SRC macro
+gcc $(SRC) -o mainapp
+
+- '#' is used to command the line in makefile.
+
+Src :
+  - main.c
+  - display.c
+Inc :
+  - display.h
+
+- Find all the files with .c and its extension
+SRC = $(shell find -name '*.c)
+- To execute shell command from make file use shell command.
+- To remove make file : rm -f executablefile
+
+Inc :
+#include "display.h"
+It is in user defined location.
+user defined location : By default it is in current working directory if not spacified by user.
+#include<> : seraches the header in predefined location and location specified by the user.
+#include" " : First seraches in user defined location if not found then it will serach in the predefined location.
+
+Make file :
+```c
+all :
+     gcc ./src/main.c ./src/display.c  -I ./inc -o mainapp
+```
+- -I used to indicate include folders.
+src :
+main.c 
+```c
+ #include<stdio.h>
+#include "display.h"
+
+void main(){
+        display("Hello world\n");
+}
+```
+display.c
+```c
+#include<stdio.h>
+
+void display(char *buffer){
+        printf("%s\n",buffer);
+}
+```
+
+inc :
+display.h 
+```c
+#ifndef _DISPLAY_H
+#define _DISPLAY_H
+
+void display(char *buffer);
+
+#endif
+```
+
+Make file :
+```c
+SRC : ./src/main.c  ./src/display.c
+INC : ./inc
+all :
+     gcc $(SRC) -I$(INC) -o mainapp
+clean :
+      rm -f mainapp
+```
 
 ## src (Directory)  
 - lib1
@@ -13,7 +151,7 @@
 ### contents :
 - commands to define project,add source,includes and executable
 
-- projects(<project name>) #optional
+- projects(<projectname>) #optional
 - set(<src_variable_name><src1><src2><src3>....)#mandatory
 - Include_directories(
              inc_dir1/
@@ -134,5 +272,37 @@ Being on a machine, compiles for same machine.
 ## Cross compiler :
 Being aon a machine, compiles for different machine.
 And generated code was not compiled on the own machine.
+Either OS is differentor processor architecture is different.
+This process is called cross compilation and the corresponding compiler is called cross compiler.
+whenever we are compiling for the different machine we are refering to that machine called target.
+X86/X64  -> intel architecture
+Target -> any architecture (arm,power pc,bare meta,Linux based,RTOS based)
 
+### c/c++ :
+Unbuntu  -> gcc(c compiler) and g++ (cpp compiler)
+Install gnu compilers : sudo apt-get install build-essentials
 
+- For cross compilation we have to consider :
+     - Hardware architecture
+     - Vendor/Manufacture
+ 
+- software SDK -> software development kit
+- It have libraries specific to controller/processor and cross compilation.
+- Vendors and manufactures have their to supply the libraries and cross compilers.
+- Libraries and cross compilers are mandatory for the cross compilations.
+
+- For cross compilations :
+Preparing the build using cross compilers
+1.path to the cross compiler.
+2.Full label/name of the cross compiler.
+
+CMAKE_C_COMPILER >> indicates tool for c compiler.
+CMAKE_CXX_COMPILER >> indicates tool for c++ compiler.
+
+These two compilers (c and c++) indicates /user/bin path.
+For cross compilation,modify these above macros (c and c++) with path of cross compiler.
+cmake seraching and checking gcc and g++ in default whether present or working or not.
+
+create <toolchain>.cmake file to provide the instructions to set cross compilation.
+cmake -DCMAKE_TOOLCHAIN_FILE = /path/to/cmake -toolchain.cmake ../path/to project/src
+Above command is used to set the cross compilation path.
