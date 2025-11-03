@@ -305,4 +305,78 @@ cmake seraching and checking gcc and g++ in default whether present or working o
 
 create <toolchain>.cmake file to provide the instructions to set cross compilation.
 cmake -DCMAKE_TOOLCHAIN_FILE = /path/to/cmake -toolchain.cmake ../path/to project/src
-Above command is used to set the cross compilation path.
+Above command is used to set the cross compilation path.T
+To remove cmake file rm -rf *
+
+### Steps for cross compilation :
+- 1.create cmake-toolchain.cmake in top-level directory.
+- 2.set the path of the compiler
+  set(CC_TOOL_PATH /home/username/ti-preprocessor-sdk-linux-arm5-xx -evm-08_02_01_00/linux-devkit/sysroots/x86-64-argo-linux)
+  path present in ti-processor-sdk-linux-am57xx-evm_08_02_01_00/linux-devkit/sysroots/x86_64_argo -linux/usr/bin
+  set(CMAKE_C_COMPILER ${CC_TOOL_PATH}/usr/bin/arm-none-linux-gnueabihf-gcc)
+- 3.Goto build directory
+  username/build_math $ cmake -DCMAKE_TOOLCHAIN_FILE=../project_math/cmake-toolchain.cmake.
+  cmake takes the instruction from cmake-toolchain.cmake before starting build.
+  Executable mainapp present in the Bin directory.
+
+
+## Linux :
+- Linux Subsystems  :
+    - Process management
+    - Memory management 
+    - Network management
+    - Device management
+    - File I/O management
+Single program that controls all the subsystems is called Linux-Kernel.
+On kernel,we will focus on device management subsystem.
+Every component is accessible through individual dedicated file.
+
+- File systems in Linux :
+    - /etc/
+    - /boot/
+    - /dev/
+    - /sys/
+    - /var/
+    - /lib/
+    - /usr/
+    - /proc/
+For accessing device management subsystem /dev/ and /sys/ is used.
+Except boot, all these file systems are temporary.
+These file systems cannot be found on harddisk or hard drive.
+These files systems are loaded only when Linux boots up.
+Linux kernel loads these file systems.
+They are created dynamically and loaded by Linux-kernel.
+
+- /dev/  -> Character device files
+- /sys/  -> Entities of platform devices
+- /proc/ -> Details of running process
+
+All these files system are temporary there are not present in the harddisk.
+Linux loads these file systems at boot up time.
+
+- Why we need to configure/compile kernel ?
+Configure the kernel according to the peripherals present in the target board.
+Drivers for the hardware which are not present in the target board should be removed from the kernel.
+We are scalling down the size of kernel by removing unneccessary drivers.
+Configuration is done before the compilation process.
+Current running kernel will not have any effect of the configuartion changes.
+
+
+- 1.Configure the kernel -> Linux source code 
+- 2.Compile the kernel
+     - reflect the changes
+     - Compile according to the hardware architecture
+- 3.Deployment (Install) the kernel.
+
+## Prerequisities :
+make utility
+compiler tool chain -> host/cross
+
+For required packages :
+```c
+sudo apt-get install build-essentials
+```
+- Primary purpose of the kernel configuration to remove or add drivers.
+kconfig file  -> Provides the details of the driver
+.config file  -> Keeps the information/track of saved configuration
+device tree files -> Individual driver specifications
