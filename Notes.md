@@ -271,12 +271,19 @@ Being on a machine, compiles for same machine.
 
 ## Cross compiler :
 Being aon a machine, compiles for different machine.
+
 And generated code was not compiled on the own machine.
+
 Either OS is differentor processor architecture is different.
+
 This process is called cross compilation and the corresponding compiler is called cross compiler.
+
 whenever we are compiling for the different machine we are refering to that machine called target.
+
 X86/X64  -> intel architecture
+
 Target -> any architecture (arm,power pc,bare meta,Linux based,RTOS based)
+
 
 ### c/c++ :
 Unbuntu  -> gcc(c compiler) and g++ (cpp compiler)
@@ -299,13 +306,20 @@ Preparing the build using cross compilers
 CMAKE_C_COMPILER >> indicates tool for c compiler.
 CMAKE_CXX_COMPILER >> indicates tool for c++ compiler.
 
+
 These two compilers (c and c++) indicates /user/bin path.
+
 For cross compilation,modify these above macros (c and c++) with path of cross compiler.
+
 cmake seraching and checking gcc and g++ in default whether present or working or not.
 
+
 create <toolchain>.cmake file to provide the instructions to set cross compilation.
+
 cmake -DCMAKE_TOOLCHAIN_FILE = /path/to/cmake -toolchain.cmake ../path/to project/src
+
 Above command is used to set the cross compilation path.
+
 To remove cmake file rm -rf *
 
 ### Steps for cross compilation :
@@ -329,7 +343,9 @@ To remove cmake file rm -rf *
     - File I/O management
 
 Single program that controls all the subsystems is called Linux-Kernel.
+
 On kernel,we will focus on device management subsystem.
+
 Every component is accessible through individual dedicated file.
 
 - File systems in Linux :
@@ -343,10 +359,15 @@ Every component is accessible through individual dedicated file.
     - /proc/
 
 For accessing device management subsystem /dev/ and /sys/ is used.
+
 Except boot, all these file systems are temporary.
+
 These file systems cannot be found on harddisk or hard drive.
+
 These files systems are loaded only when Linux boots up.
+
 Linux kernel loads these file systems.
+
 They are created dynamically and loaded by Linux-kernel.
 
 - /dev/  -> Character device files
@@ -354,14 +375,19 @@ They are created dynamically and loaded by Linux-kernel.
 - /proc/ -> Details of running process
 
 All these files system are temporary there are not present in the harddisk.
+
 Linux loads these file systems at boot up time.
 
 - Why we need to configure/compile kernel ?
 
 Configure the kernel according to the peripherals present in the target board.
+
 Drivers for the hardware which are not present in the target board should be removed from the kernel.
+
 We are scalling down the size of kernel by removing unneccessary drivers.
+
 Configuration is done before the compilation process.
+
 Current running kernel will not have any effect of the configuartion changes.
 
 
@@ -382,5 +408,7 @@ sudo apt-get install build-essentials
 - Primary purpose of the kernel configuration to remove or add drivers.
 
 kconfig file  -> Provides the details of the driver
+
 .config file  -> Keeps the information/track of saved configuration
+
 device tree files -> Individual driver specifications
