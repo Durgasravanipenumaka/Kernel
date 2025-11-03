@@ -305,7 +305,7 @@ cmake seraching and checking gcc and g++ in default whether present or working o
 
 create <toolchain>.cmake file to provide the instructions to set cross compilation.
 cmake -DCMAKE_TOOLCHAIN_FILE = /path/to/cmake -toolchain.cmake ../path/to project/src
-Above command is used to set the cross compilation path.T
+Above command is used to set the cross compilation path.
 To remove cmake file rm -rf *
 
 ### Steps for cross compilation :
@@ -327,6 +327,7 @@ To remove cmake file rm -rf *
     - Network management
     - Device management
     - File I/O management
+
 Single program that controls all the subsystems is called Linux-Kernel.
 On kernel,we will focus on device management subsystem.
 Every component is accessible through individual dedicated file.
@@ -340,6 +341,7 @@ Every component is accessible through individual dedicated file.
     - /lib/
     - /usr/
     - /proc/
+
 For accessing device management subsystem /dev/ and /sys/ is used.
 Except boot, all these file systems are temporary.
 These file systems cannot be found on harddisk or hard drive.
@@ -355,6 +357,7 @@ All these files system are temporary there are not present in the harddisk.
 Linux loads these file systems at boot up time.
 
 - Why we need to configure/compile kernel ?
+
 Configure the kernel according to the peripherals present in the target board.
 Drivers for the hardware which are not present in the target board should be removed from the kernel.
 We are scalling down the size of kernel by removing unneccessary drivers.
@@ -377,6 +380,7 @@ For required packages :
 sudo apt-get install build-essentials
 ```
 - Primary purpose of the kernel configuration to remove or add drivers.
+
 kconfig file  -> Provides the details of the driver
 .config file  -> Keeps the information/track of saved configuration
 device tree files -> Individual driver specifications
