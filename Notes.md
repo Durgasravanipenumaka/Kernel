@@ -412,3 +412,73 @@ kconfig file  -> Provides the details of the driver
 .config file  -> Keeps the information/track of saved configuration
 
 device tree files -> Individual driver specifications
+
+- Download the Linux kernel source code from www.kernel.org
+
+- For checking kernel versions we use
+  uname -r
+
+- Extract the source code from tar file
+  tar -xvf <version>
+
+In Linux version we have so many folders.From that folders we are concentrating on drivers and arch folders.
+Programs,kernel and other software components should be compact as much as possible. Due to limited storage size in embedded devices.
+
+### 1.configuration :
+- make menuconfig
+
+make menuconfig provides as interactive userspace to add/remove the components.
+
+make menuconfig requires ncurses library.
+
+- make <> defconfig
+
+Standard board manufactures will provide configuration files to quickly configure the linux kernel source according to their boards.
+
+make <  > defconfig applies the configuration from the file defconfig file.
+Eg : make raspi_ defconfig
+
+If you don't have defconfig then we can go through make menuconfig.
+
+make menuconfig presents list of drivers which are part of kernel source code.
+
+- '*' -> The driver or component which is marked as star will be compiled and integrated to the kernel and are also called as buildin modules.
+
+Buildin drivers cannot be removed from the running kernels.
+
+Buildin drivers are part of kernel binary.
+
+- 'M' -> Removable modules
+
+Removable modules will be compiled and seperate binary will be created for corressponding driver or module.
+
+Removable modules can be installed or removed from the kernel at any point of time.
+
+' ' -> Excluded from compilation.
+
+<Y> -> Build-in
+
+<N> -> Excludes
+
+<M> -> Modularize features
+
+[*] -> build-in
+
+[ ] -> excluded
+
+<M> -> Module
+
+< > -> Module capable
+
+once the configuration done save the configuration before exiting make menuconfig.
+
+- ls -a -> To see the hiodden files or files ends with '.'.
+
+make menuconfiguration or defconfiguration the configuration are saved .config file.
+
+Whenever we are compiling the kernel which module is build in /removable / excludes all the three will be scanned from .config file.
+
+### Compilation :
+- Legendery :
+
+make 
