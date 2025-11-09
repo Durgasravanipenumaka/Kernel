@@ -481,4 +481,164 @@ Whenever we are compiling the kernel which module is build in /removable / exclu
 ### Compilation :
 - Legendery :
 
-make 
+make   -> build kernel & *marked modules
+
+make modules  -> build modules marked as M
+
+make modules_install  -> Install all removable modules(M)
+
+make install   -> Install the newly generated kernel
+
+- New Kernel :
+
+make -> build kernel and * marked modules
+
+make module_install  -> build and install all removable module(M)
+
+make install  -> Install the newly generated kernel
+
+All these commands can be executed from the top level directory only.
+
+make install  -> creates an entry in /etc/default/grub
+
+GRUB helps to select the operating system to be booted.
+
+At the boot up time GRUB shows the list of operating system to be selected.
+
+ - make install
+ - sudo update -grub  -> refreshes the grub menu
+
+- def config :
+
+From top level directory we have to go to /linux version/arch/arm/config
+
+here config -> all def config files are present in this folder
+
+Any new defconfig is placed in this folder only.
+
+High light the driver and press ? to get the details of driver.
+
+Types defines the states  
+
+This driver have two states 
+   - '*' - Y
+   - [] - n
+
+#### prompt : 
+short description given to the driver in make menuconfig.
+
+#### Location :
+Indicates the location of driver i make menuconfig.
+
+#### Defined at :
+It actually shows the location of the kconfig file which is providing details of this driver.
+
+make menuconfig is reading the kconfig files to list the drivers in the make menuconfig.
+
+kconfig file is responsible to proviode the details of drivers to make menuconfig.
+
+Each kconfig file will either provide the information of driver or paths to next kconfig file.
+
+Execute make menuconfig and save it.
+
+kconfig file provides the details of the particular driver along with configuration options in make menuconfig.
+
+'*' in make menuconfig leads to y in .config.
+
+'M' in make menuconfig leads to m in .config.
+
+'[]' in make menuconfig leads to comment #.
+
+The defconfig files also have similar macros when defconfig is applied the .config file will be updated according to the macros present in defconfig file.
+
+Newly added driver must be populated in make menuconfig by updating its details in kconfig files.
+
+Depends on indicates on which driver the current driver depends on.
+
+To indicate a new driver kconfig files must be updated with the updated details of new driver.
+
+If we use see/boot directory after compilation of kernel you find so may binaries.
+
+kconfig file is used to integrate the driver into kernel.
+
+After kernel compilation the name of binary generated Vmlinux.
+
+Vmlinux  ---->  Vmlinuz
+
+make install copy is the vmlinuz to /boot directory.
+
+Vmlinuz is the actual kernel binary which loads when CPU boots.
+
+- Difference between user-application and Modules :
+
+| user-applications | Modules |
+| Entry point -> main()| module_init(entry function) |
+| No exut point | module_exit(exit function) |
+| run in user space of RAM | Run in kernel space of RAM |
+| Base for console and GUI application | Base for device drivers |
+| Waits for request from user/another userapp/kernel | waits for request from userapp,another module and hardware |
+| Terminates when main function terminates | remains in kernel space of RAM untill removed |
+| programs running in userspace of RAM | Programs running in kernel space of RAM |
+
+A function is passed as an argument to module_init() macro is entry point of the modules.
+
+Function passed as an argument to module_exit() macro is exit point.
+
+Every device driver is a module but every module is not a driver.
+
+Module waiting for request from hardware,another module.
+
+Kernel cannot handle the errors in module.
+
+#### Memory Leak :
+When the address to dynamically allocated memory is lost before freeing it or before deallocating, it is called memory leak.
+
+Invalid of pointers in the module, the system will be crashed. kernel doesnot handle these in modules.
+
+For avoiding system crash :
+```c
+if(*ptr != NULL){
+      x=*ptr;
+}
+```
+
+whenever you try to free the pointer , immmediately after freeing the pointer ,assign it to NULL.
+```c
+free(ptr);
+ptr=NULL;
+```
+
+Even if the module is removed , dynamically allocated memory which is not freed or deallocated remains in the kernel space of RAM.
+
+In kernel space of RAM ensure the preservance of pointer pointing to dynamically allocated memory.
+
+Use the exit() (or) exit point to freeup or deallocate all the resources allocated by the module.
+
+Use global pointers, instead of local pointers to extend the scope.
+
+Kernel build will be used to compile the modules or driver never use gcc
+
+- .c .c .c  -> a.out/executable
+- .c .c .c  -> .ko file
+
+initialization function -> entry point
+Exit function -> exit point
+
+Function to be created as an entry point should be passed as an argument to module_init() macro.
+```c
+module_init(function name)
+```
+
+Function to be created as an exit point should be passed as an argument to module_exit() macro.
+```c
+module_exit(function name)
+```
+
+printk() is used to print message in kernel log.
+
+simple module :
+```c
+
+```
+
+
