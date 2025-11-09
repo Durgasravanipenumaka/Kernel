@@ -571,14 +571,14 @@ Vmlinuz is the actual kernel binary which loads when CPU boots.
 
 - Difference between user-application and Modules :
 
-| user-applications | Modules |
-| Entry point -> main()| module_init(entry function) |
-| No exut point | module_exit(exit function) |
-| run in user space of RAM | Run in kernel space of RAM |
-| Base for console and GUI application | Base for device drivers |
-| Waits for request from user/another userapp/kernel | waits for request from userapp,another module and hardware |
-| Terminates when main function terminates | remains in kernel space of RAM untill removed |
-| programs running in userspace of RAM | Programs running in kernel space of RAM |
+| User Applications     | Kernel Modules              |
+| --------------------- | --------------------------- |
+| `main()` entry        | `module_init()`             |
+| no defined exit-point | `module_exit()`             |
+| user space RAM        | kernel space RAM            |
+| console/GUI           | device drivers              |
+| terminate with main() | stay resident until removed |
+
 
 A function is passed as an argument to module_init() macro is entry point of the modules.
 
