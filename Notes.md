@@ -370,9 +370,14 @@ Linux kernel loads these file systems.
 
 They are created dynamically and loaded by Linux-kernel.
 
-- /dev/  -> Character device files
-- /sys/  -> Entities of platform devices
-- /proc/ -> Details of running process
+#### Virtual File Systems Loaded by the Kernel 
+
+| Filesystem | Purpose                  |
+| ---------- | ------------------------ |
+| `/dev/`    | Character device files   |
+| `/sys/`    | Platform device entities |
+| `/proc/`   | Runtime process details  |
+
 
 All these files system are temporary there are not present in the harddisk.
 
@@ -407,19 +412,26 @@ sudo apt-get install build-essentials
 ```
 - Primary purpose of the kernel configuration to remove or add drivers.
 
-kconfig file  -> Provides the details of the driver
+#### kconfig file  
+Provides the details of the driver
 
-.config file  -> Keeps the information/track of saved configuration
+#### .config file  
+Keeps the information/track of saved configuration
 
-device tree files -> Individual driver specifications
+#### Device tree files 
+Individual driver specifications
 
 - Download the Linux kernel source code from www.kernel.org
 
 - For checking kernel versions we use
+```c
   uname -r
+```
 
 - Extract the source code from tar file
-  tar -xvf <version>
+```c
+  tar -xvf <version>.tar.xz
+```
 
 In Linux version we have so many folders.From that folders we are concentrating on drivers and arch folders.
 Programs,kernel and other software components should be compact as much as possible. Due to limited storage size in embedded devices.
@@ -431,12 +443,30 @@ make menuconfig provides as interactive userspace to add/remove the components.
 
 make menuconfig requires ncurses library.
 
-- make <> defconfig
+#### symbols :
+
+| Symbol         | Meaning         |
+| -------------- | --------------- |
+| `*` or `<Y>`   | Built-in        |
+| `<M>`          | Loadable module |
+| `[ ]` or `<N>` | Excluded        |
+
+
+- make <board>_defconfig
 
 Standard board manufactures will provide configuration files to quickly configure the linux kernel source according to their boards.
 
 make <  > defconfig applies the configuration from the file defconfig file.
-Eg : make raspi_ defconfig
+Eg :
+```c
+make raspi_defconfig
+```
+Save the Configuration
+
+Saved into:
+```c
+.config
+```
 
 If you don't have defconfig then we can go through make menuconfig.
 
@@ -488,6 +518,12 @@ make modules  -> build modules marked as M
 make modules_install  -> Install all removable modules(M)
 
 make install   -> Install the newly generated kernel
+```c
+make                # kernel + built-in modules
+make modules        # build M modules only
+make modules_install
+make install
+```
 
 - New Kernel :
 
@@ -497,6 +533,12 @@ make module_install  -> build and install all removable module(M)
 
 make install  -> Install the newly generated kernel
 
+```c
+make
+make modules_install
+make install
+```
+
 All these commands can be executed from the top level directory only.
 
 make install  -> creates an entry in /etc/default/grub
@@ -505,9 +547,19 @@ GRUB helps to select the operating system to be booted.
 
 At the boot up time GRUB shows the list of operating system to be selected.
 
- - make install
- - sudo update -grub  -> refreshes the grub menu
+#### Bootloader (GRUB)
 
+- make install
+- sudo update-grub  -> refreshes the grub menu
+
+make install updates:
+```c
+/etc/default/grub
+```
+Then refreshes :
+```c
+sudo update-grub
+```
 - def config :
 
 From top level directory we have to go to /linux version/arch/arm/config
@@ -567,7 +619,15 @@ Vmlinux  ---->  Vmlinuz
 
 make install copy is the vmlinuz to /boot directory.
 
-Vmlinuz is the actual kernel binary which loads when CPU boots.
+Vmlinuz is the actual kernel binary which loads when CPU boots
+
+#### Kernel Binary Naming 
+
+| Binary    | Meaning                            |
+| --------- | ---------------------------------- |
+| `vmlinux` | uncompressed kernel                |
+| `vmlinuz` | compressed kernel (loaded at boot) |
+
 
 - Difference between user-application and Modules :
 
@@ -638,7 +698,96 @@ printk() is used to print message in kernel log.
 
 simple module :
 ```c
+#include <linux/init.h>
+#include <linux/module.h>
+#include <linux/kernel.h>
 
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Your Name");
+MODULE_DESCRIPTION("Simple Linux Kernel Module");
+MODULE_VERSION("1.0");
+
+static int __init hello_init(void)
+{
+    printk(KERN_INFO "Hello Kernel! Module Loaded.\n");
+    return 0;
+}
+
+static void __exit hello_exit(void)
+{
+    printk(KERN_INFO "Goodbye Kernel! Module Removed.\n");
+}
+
+module_init(hello_init);
+module_exit(hello_exit);
+
+```
+For compilation of modules and drivers makefile is used.
+we need build to compile a module 
+
+#### build :
+```c
+/lib/module/<kernel version>/build
+```
+
+- Create a Makefile in the same folder
+```c
+obj-m += hello_module.o
+
+KDIR := /lib/modules/$(shell uname -r)/build
+
+all:
+	$(MAKE) -C $(KDIR) M=$(PWD) modules
+
+clean:
+	$(MAKE) -C $(KDIR) M=$(PWD) clean
+```
+
+- To insert the moduke we have to use
+```c
+sudo insmod <module_name.ko>
+```
+
+- To see kernel logs
+```c
+dmesg
+```
+
+- check points to verify the module installation :
+Check the printk messages
+check proc file system
+   - cat /proc/modules
+   - lsmod
+
+Whenever a module is installed it creates an entry in /proc/modules
+
+Execute cat /proc/modules to see the installed module
+
+- We have another way to see installed module lsmod
+
+```c
+lsmod # it shows list from /proc/modules only
+```
+
+- To remove module
+```c
+sudo rmmod hello_module
+```
+- Module Entry and Exit Macros
+
+In Linux kernel modules:
+
+- `__init` for **entry**
+  - This indicates the function is used **only during module initialization**
+  - After the initialization is complete, the function’s memory can be **freed/offloaded** to save RAM (important for embedded systems)
+
+- `__exit` for **exit**
+  - This indicates the function is used **only during module removal**
+  - If a module is built into the kernel (not loadable), this function will be discarded, as it’s not needed
+
+```c
+MODULE_LINCENSE("GPL");
+MODULE_AUTHOR("Author name");
 ```
 
 
